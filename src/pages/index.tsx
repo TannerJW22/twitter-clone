@@ -1,21 +1,20 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import { api } from "@/utils/api";
 import { SignIn, SignInButton, useUser } from "@clerk/nextjs";
-import { type Post } from "@prisma/client";
 import CreatePostWidget from "@/components/CreatePostWidget";
-import { type PostAuthor } from "@/utils";
-import PostView, { PostViewProps } from "@/components/PostView";
+import { LoadingSpinner } from "@/components/LoadingUI";
+import PostsFeed from "@/components/PostsFeed";
+import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
-  const user = useUser();
+  const { user, isLoaded, isSignedIn } = useUser();
+  const userIsLoading = !isLoaded;
 
-  const { data, isLoading } = api.posts.getAll.useQuery();
-  console.log("Data >>>", data); // <<--*
+  // Start fetching ASAP (react query will auto-cache it for the PostsFeed load)
+  const { data, isLoading: postsIsLoading } = api.posts.getAll.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (!data) return <div>Error Loading Data. Try Again.</div>;
+  if (userIsLoading) return <div />;
 
   return (
     <>
@@ -28,18 +27,18 @@ const Home: NextPage = () => {
       <main className="flex h-screen justify-center">
         <div className="h-full w-full border-x border-slate-400 md:max-w-2xl">
           <div className="flex border-b border-slate-400 p-4">
-            {!user.isSignedIn && (
+            {isSignedIn && (
               <div className="flex justify-center">
                 <SignInButton />
               </div>
             )}
-            {user.isSignedIn && <CreatePostWidget />}
+            {isSignedIn && <CreatePostWidget />}
           </div>
-          <div className="flex flex-col">
-            {data.map(({ post, author }: PostViewProps) => (
-              <PostView key={post.id} post={post} author={author} />
-            ))}
-          </div>
+          {postsIsLoading ? (
+            <LoadingSpinner displayType="component" size={50} />
+          ) : (
+            <PostsFeed />
+          )}
         </div>
       </main>
     </>
