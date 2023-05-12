@@ -13,12 +13,12 @@ const PostView: React.FC<PostViewProps> = ({ post, author }) => {
         src={author.profileImageUrl}
         alt="post-image"
       />
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-1">
         <div className="flex gap-2 text-slate-300">
           <span className="font-semibold">{`@${author.username}`}</span>
           <span>{`·   ${dayjs(post.createdAt).fromNow()}`}</span>
         </div>
-        <span>{post.content}</span>
+        <span className="text-2xl">{post.content}</span>
       </div>
     </div>
   );

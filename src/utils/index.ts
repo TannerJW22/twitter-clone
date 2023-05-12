@@ -9,12 +9,6 @@ export type PostAuthor = {
   profileImageUrl: string | undefined;
 };
 
-export enum LoadingDisplayType {
-  full = "full",
-  component = "component",
-  icon = "icon",
-}
-
 // ------------ Util Functions ------------ //
 
 export const parseClerkUser = (user: User): PostAuthor => {
