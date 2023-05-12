@@ -1,0 +1,31 @@
+import { type RouterOutputs } from "@/utils/api";
+import React from "react";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
+const PostView: React.FC<PostViewProps> = ({ post, author }) => {
+  return (
+    <div key={post.id} className="flex gap-3 border-b border-slate-400 p-4">
+      <img
+        className="h-14 w-14 rounded-full"
+        src={author.profileImageUrl}
+        alt="post-image"
+      />
+      <div className="flex flex-col">
+        <div className="flex gap-2 text-slate-300">
+          <span className="font-semibold">{`@${author.username}`}</span>
+          <span>{`·   ${dayjs(post.createdAt).fromNow()}`}</span>
+        </div>
+        <span>{post.content}</span>
+      </div>
+    </div>
+  );
+};
+
+export type PostViewProps = RouterOutputs["posts"]["getAll"][number];
+//number is on the end to indicate this type is for a single post in the array.
+// excluding the number defaults the type to the entire returned array;
+
+export default PostView;
