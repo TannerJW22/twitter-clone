@@ -3,11 +3,11 @@ import Head from "next/head";
 
 import { SignIn, SignInButton, useUser } from "@clerk/nextjs";
 import CreatePostWidget from "@/components/CreatePostWidget";
-import { LoadingSpinner } from "@/components/LoadingUI";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import PostsFeed from "@/components/PostsFeed";
 import { api } from "@/utils/api";
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
   const { user, isLoaded, isSignedIn } = useUser();
   const userIsLoading = !isLoaded;
 
@@ -45,4 +45,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default HomePage;

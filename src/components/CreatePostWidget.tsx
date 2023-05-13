@@ -2,6 +2,8 @@
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 const CreatePostWidget: React.FC<CreatePostWidgetProps> = () => {
   const ctx = api.useContext();
@@ -13,11 +15,16 @@ const CreatePostWidget: React.FC<CreatePostWidgetProps> = () => {
         setInput("");
         void ctx.posts.getAll.invalidate();
       },
+      onError: (e) => {
+        const errorMessage = e.data?.zodError?.fieldErrors.content;
+
+        errorMessage && errorMessage[0]
+          ? toast.error(errorMessage[0])
+          : toast.error("Failed to post! Please try again later.");
+      },
     });
 
   if (!user) return null;
-
-  console.log(user); // <<--*
 
   return (
     <div className="flex w-full gap-3">
@@ -31,9 +38,24 @@ const CreatePostWidget: React.FC<CreatePostWidgetProps> = () => {
         className="grow bg-transparent outline-none"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            input !== "" && mutate({ content: input });
+          }
+        }}
         disabled={mutationInProgress}
       />
-      <button onClick={() => mutate({ content: input })}>Post</button>
+      <button
+        onClick={() => mutate({ content: input })}
+        disabled={mutationInProgress}
+      >
+        {mutationInProgress ? (
+          <LoadingSpinner displayType="icon" size={30} />
+        ) : (
+          "Post"
+        )}
+      </button>
     </div>
   );
 };
