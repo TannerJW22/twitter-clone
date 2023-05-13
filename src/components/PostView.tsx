@@ -30,7 +30,7 @@ const PostView: React.FC<PostViewProps> = ({ post, author }) => {
 };
 
 export type PostViewProps = RouterOutputs["posts"]["getAll"][number];
-//number is on the end to indicate this type is for a single post in the array.
+// number is on the end to indicate this type is for a single post in the array.
 // excluding the number defaults the type to the entire returned array;
 
 export default PostView;

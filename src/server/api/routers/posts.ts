@@ -9,7 +9,7 @@ import {
 } from "@/server/api/trpc";
 import { clerkClient } from "@clerk/nextjs/server";
 import { type Post } from "@prisma/client";
-import { parseClerkUser } from "@/utils";
+import { PostAuthor, parseClerkUser } from "@/utils";
 import { TRPCError } from "@trpc/server";
 
 import { Ratelimit } from "@upstash/ratelimit";
@@ -79,5 +79,24 @@ export const postsController = createTRPCRouter({
       });
 
       return post;
+    }),
+
+  // :::
+  getPostsByUserId: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      const posts = ctx.prisma.post.findMany({
+        where: {
+          authorId: input.userId,
+        },
+        take: 100,
+        orderBy: [{ createdAt: "desc" }],
+      });
+
+      return posts;
     }),
 });
