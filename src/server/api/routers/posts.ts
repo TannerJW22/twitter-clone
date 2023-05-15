@@ -40,7 +40,7 @@ export const postsController = createTRPCRouter({
       })
     ).map(parseClerkUser); //sanitize {ClerkUser} down to what is necessary
 
-    return posts.map((post: Post) => {
+    const enhancedPosts = posts.map((post: Post) => {
       const author = users.find((user: any) => user.id === post.authorId);
 
       if (!author || !author.username)
@@ -55,6 +55,8 @@ export const postsController = createTRPCRouter({
         // {post.author} now has a mini user info object.
       };
     });
+
+    return enhancedPosts;
   }),
 
   // :::
@@ -88,8 +90,8 @@ export const postsController = createTRPCRouter({
         userId: z.string(),
       })
     )
-    .query(({ ctx, input }) => {
-      const posts = ctx.prisma.post.findMany({
+    .query(async ({ ctx, input }) => {
+      const posts = await ctx.prisma.post.findMany({
         where: {
           authorId: input.userId,
         },
@@ -98,5 +100,33 @@ export const postsController = createTRPCRouter({
       });
 
       return posts;
+    }),
+
+  // :::
+  getSinglePostById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const post = await ctx.prisma.post.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!post)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Post not found {postsController.getSinglePostById()}",
+        });
+
+      const author = await clerkClient.users.getUser(post.authorId);
+
+      return {
+        post,
+        author: parseClerkUser(author),
+      };
     }),
 });

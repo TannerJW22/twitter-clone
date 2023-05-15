@@ -9,7 +9,7 @@ const PostsFeed = () => {
 
   return (
     //
-    <div className="flex flex-col">
+    <div className="container flex w-full flex-col">
       {data.map(({ post, author }: PostViewProps) => (
         <PostView key={post.id} post={post} author={author} />
       ))}

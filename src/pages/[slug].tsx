@@ -25,7 +25,7 @@ export const ProfilePage: NextPage<ProfilePageProps> = ({ username }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-screen justify-center">
-        <div className="h-full w-full border-x border-slate-400 text-white md:max-w-2xl">
+        <div className="-400 h-full w-full border-x text-white md:max-w-2xl">
           <div className="relative h-36 bg-slate-600">
             <img
               src={user.profileImageUrl}
@@ -39,7 +39,7 @@ export const ProfilePage: NextPage<ProfilePageProps> = ({ username }) => {
           <div className="p-4 text-2xl font-bold">{`@${
             user.username ?? "unknown"
           }`}</div>
-          <div className="w-full border-b border-slate-400" />
+          <div className="w-full border-b border-slate-700" />
           <ProfileFeed user={user} />
         </div>
       </main>
@@ -63,7 +63,7 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (ctx: any) => {
-  const username = ctx.params.slug.replace("@", "");
+  const username: string = ctx.params.slug.replace("@", "");
 
   // could theoretically fetch the user here (pre-render) but the ssgHelper was deprecated.
   // not sure how to resolve.
