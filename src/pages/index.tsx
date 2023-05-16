@@ -1,5 +1,5 @@
 // :::| 1) fix PostDetail page (also loading state is incorrect it should not say 404 during load)
-// 2) fix Profile Feed
+// 2) fiex
 
 import { type NextPage } from "next";
 import Head from "next/head";
@@ -25,8 +25,8 @@ const HomePage: NextPage = () => {
     <>
       <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
       <main className="flex h-screen justify-center">
-        <div className="h-full w-full border-x border-slate-700 md:max-w-2xl">
-          <div className="container flex w-full items-center justify-center gap-6 border border-red-500 py-4 text-center">
+        <div className="h-full w-full  md:max-w-2xl">
+          <div className="container flex w-full items-center justify-center gap-6 border-b border-slate-700 py-4 text-center">
             <span className="font-serif font-thin italic">Emoji Twitter</span>
             <img
               className="w-15 h-12"

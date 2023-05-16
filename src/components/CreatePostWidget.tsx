@@ -4,9 +4,15 @@ import { useUser } from "@clerk/nextjs";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { LoadingSpinner } from "./LoadingSpinner";
-import { primaryButtonStyle, secondaryButtonStyle } from "@/styles/index.tbz";
+import {
+  emojiButtonStyle,
+  primaryButtonStyle,
+  profileImgStyle,
+  secondaryButtonStyle,
+} from "@/styles/index.tbz";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { CiFaceSmile } from "react-icons/ci";
 
 const CreatePostWidget: React.FC<CreatePostWidgetProps> = () => {
   const ctx = api.useContext();
@@ -32,15 +38,19 @@ const CreatePostWidget: React.FC<CreatePostWidgetProps> = () => {
     <div className="flex w-full gap-3 border-b border-slate-700">
       <div className="mb-8 flex w-full gap-6">
         <img
-          src={"/img/twitter-logo.png" || `${user?.profileImageUrl}`}
+          src={user ? `${user?.profileImageUrl}` : "/img/twitter-logo.png"}
           alt="profile image"
-          className="-white h-14 w-16 rounded-full border-2 border-dotted border-white p-1.5 opacity-[0.15]"
+          className={
+            user ? profileImgStyle.isLoggedIn : profileImgStyle.isGuest
+          }
         />
         <input
-          placeholder={`Hello ${
-            `${user?.username}` || "Guest"
-          }, share an emoji!`}
-          className="grow bg-transparent outline-none"
+          placeholder={
+            user
+              ? `Hello ${user?.username}! Share an emoji.`
+              : `Hello guest! Login to post.`
+          }
+          className="grow bg-transparent text-2xl outline-none placeholder:text-lg"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
@@ -51,7 +61,7 @@ const CreatePostWidget: React.FC<CreatePostWidgetProps> = () => {
           }}
           disabled={mutationInProgress}
         />
-        <div className="flex gap-4">
+        <div className="flex gap-2 px-5">
           {pickerIsVisible ? (
             <div className="max-h-1">
               <Picker
@@ -69,11 +79,11 @@ const CreatePostWidget: React.FC<CreatePostWidgetProps> = () => {
           ) : (
             <div className="flex items-center justify-center gap-4">
               <button
-                className={`h-10 ${secondaryButtonStyle}`}
+                className=""
                 onClick={() => setPickerIsVisible(true)}
                 disabled={mutationInProgress}
               >
-                Pick Emoji
+                <CiFaceSmile className="h-11 w-11 text-white opacity-70 hover:scale-[1.05] hover:opacity-100" />
               </button>
               <button
                 onClick={() => mutate({ content: input })}

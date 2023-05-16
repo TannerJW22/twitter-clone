@@ -3,6 +3,7 @@ import { prisma } from "@/server/db";
 import { api } from "@/utils/api";
 import type { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 
 const PostDetailPage: NextPage<PostDetailPageProps> = ({ postId }) => {
   const { data: enhancedPost, isLoading: enhancedPostIsLoading } =
@@ -20,8 +21,24 @@ const PostDetailPage: NextPage<PostDetailPageProps> = ({ postId }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex h-screen justify-center">
-        <div className="h-full w-full border-x border-slate-700 md:max-w-2xl">
-          <PostView post={post} author={author} />
+        <div className="h-full w-full border-slate-700 md:max-w-2xl">
+          <div className="mt-32 flex flex-col gap-4 md:max-w-2xl">
+            <div className="flex justify-center border-b border-slate-700 py-5 md:max-w-2xl">
+              <Link href={"/"}>
+                <img
+                  className="w-15 h-12"
+                  src="/img/twitter-logo.png"
+                  alt="twitter logo"
+                />
+              </Link>
+            </div>
+            <PostView
+              post={post}
+              author={author}
+              timeDisplay="calendar"
+              disabled
+            />
+          </div>
         </div>
       </main>
     </>
@@ -48,7 +65,7 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (ctx: any) => {
-  const postId = ctx.params.id.replace("/", "").replace("}", "");
+  const postId = ctx.params.id;
 
   return {
     props: {
