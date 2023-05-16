@@ -7,6 +7,7 @@ import PostView from "@/components/PostView";
 import { Post } from "@prisma/client";
 import ProfileFeed from "@/components/ProfileFeed";
 import Link from "next/link";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export const ProfilePage: NextPage<ProfilePageProps> = ({ username }) => {
   const { data: user, isLoading: userIsLoading } =
@@ -14,7 +15,12 @@ export const ProfilePage: NextPage<ProfilePageProps> = ({ username }) => {
       username: username as PostAuthor["username"] as string,
     });
 
-  if (userIsLoading) return <div>Loading...</div>;
+  if (userIsLoading)
+    return (
+      <div>
+        <LoadingSpinner displayType="full" size={50} />
+      </div>
+    );
   if (!user) return <div>404 | User Not Found</div>;
 
   return (
