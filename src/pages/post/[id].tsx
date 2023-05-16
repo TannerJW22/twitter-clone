@@ -1,3 +1,4 @@
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import PostView from "@/components/PostView";
 import { prisma } from "@/server/db";
 import { api } from "@/utils/api";
@@ -9,6 +10,12 @@ const PostDetailPage: NextPage<PostDetailPageProps> = ({ postId }) => {
   const { data: enhancedPost, isLoading: enhancedPostIsLoading } =
     api.posts.getSinglePostById.useQuery({ id: postId });
 
+  if (enhancedPostIsLoading)
+    return (
+      <div>
+        <LoadingSpinner displayType="full" size={50} />
+      </div>
+    );
   if (!enhancedPost) return <div>404 | Post Not Found</div>;
 
   const { post, author } = enhancedPost;

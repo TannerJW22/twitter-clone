@@ -4,12 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { LoadingSpinner } from "./LoadingSpinner";
-import {
-  emojiButtonStyle,
-  primaryButtonStyle,
-  profileImgStyle,
-  secondaryButtonStyle,
-} from "@/styles/index.tbz";
+import { primaryButtonStyle, profileImgStyle } from "@/styles/index.tbz";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { CiFaceSmile } from "react-icons/ci";
